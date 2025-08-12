@@ -1,0 +1,15 @@
+#include<stdio.h>
+void main()
+{
+	int num = 5;
+	
+	for(int i = 1; i <= num; i++){
+		
+		for(int j = 5; j >= i; j--){
+			
+				printf("*");
+  			}
+		printf("\n\n");	
+	}
+		
+}
