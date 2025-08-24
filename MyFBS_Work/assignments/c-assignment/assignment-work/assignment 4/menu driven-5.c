@@ -15,7 +15,7 @@ void main()
 	printf("enter 6------>sum of digits.\n");
 	
 	int choice;
-	scanf("%d",&num);
+	scanf("%d",&choice);
 	
 	if(choice==1){
 		if(num%2 == 0)
@@ -75,9 +75,9 @@ void main()
 	
 	}
 	
-//	else if(choice==5){
-//		
-//	}
+	else if(choice==5){
+		
+	}
 	
 	else if(choice==6){
 		while(num<=5){
@@ -86,5 +86,4 @@ void main()
 	}
 	printf("sum=%d ",sum);
 	}
-	
 }
