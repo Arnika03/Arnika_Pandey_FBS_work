@@ -1,0 +1,77 @@
+						MySQL Assignment -3 (DML)
+
+Q1. Write a SQL statement to insert a record as follows:
+Employees :
+
+Ans. mysql> create table employee
+     -> (emp_id int primary key,
+     -> first_name varchar(30),
+     -> last_name varchar(30),
+     -> email varchar(30) not null unique,
+     -> phone_number varchar(30) unique,
+     -> hire_date date not null,
+     -> job_id varchar(20) not null,
+     -> salary decimal(10,2),
+     -> commission_pct decimal(5,2),
+     -> manager_id int,
+     -> dept_id int);
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> insert into employee
+    -> (emp_id , first_name , last_name , email, phone_number, hire_date,
+    -> job_id ,salary ,commission_pct ,manager_id , dept_id)values
+    -> (101,'Arnika','Pandey','arru@333','577.674.3895','2026-03-03','it_prog',90000.00,0.00,145,1),
+    -> (102,'Rupali','toge','rupa@313','309.086.8097','2027-05-18','it_prog',50000.00,0.00,145,1),
+    -> (103,'Rutuja','toge','rutuja@121','323.960.5346','2026-07-15','it_prog',60000.00,0.00,145,1),
+    -> (104,'Aman','khapra','aman@121','543.967.3576','2023-04-11','ad_vp',40000.00,0.00,135,2),
+    -> (105,'Rahul','tripathi','rahul@121','344.875.3667','2013-06-17','ad_vp',70000.00,0.00,135,2),
+    -> (106,'Mohit','Mishra','mohit@121','548.589.3487','2011-08-23','sa_man',45000.00,0.00,123,3),
+    -> (107,'Rohan','sharma','rohan@121','986.896.3567','2016-07-29','sa_man',55000.00,0.00,123,3);
+Query OK, 7 rows affected (0.07 sec)
+
+mysql> table employee;
++--------+------------+-----------+------------+--------------+------------+---------+----------+----------------+------------+---------+
+| emp_id | first_name | last_name | email      | phone_number | hire_date  | job_id  | salary   | commission_pct | manager_id | dept_id |
++--------+------------+-----------+------------+--------------+------------+---------+----------+----------------+------------+---------+
+|    101 | Arnika     | Pandey    | arru@333   | 577.674.3895 | 2026-03-03 | it_prog | 90000.00 |           0.00 |        145 |       1 |
+|    102 | Rupali     | toge      | rupa@313   | 309.086.8097 | 2027-05-18 | it_prog | 50000.00 |           0.00 |        145 |       1 |
+|    103 | Rutuja     | toge      | rutuja@121 | 323.960.5346 | 2026-07-15 | it_prog | 60000.00 |           0.00 |        145 |       1 |
+|    104 | Aman       | khapra    | aman@121   | 543.967.3576 | 2023-04-11 | ad_vp   | 40000.00 |           0.00 |        135 |       2 |
+|    105 | Rahul      | tripathi  | rahul@121  | 344.875.3667 | 2013-06-17 | ad_vp   | 70000.00 |           0.00 |        135 |       2 |
+|    106 | Mohit      | Mishra    | mohit@121  | 548.589.3487 | 2011-08-23 | sa_man  | 45000.00 |           0.00 |        123 |       3 |
+|    107 | Rohan      | sharma    | rohan@121  | 986.896.3567 | 2016-07-29 | sa_man  | 55000.00 |           0.00 |        123 |       3 |
++--------+------------+-----------+------------+--------------+------------+---------+----------+----------------+------------+---------+
+7 rows in set (0.01 sec)
+
+ crate table department
+ -> (dept_id int primary key, 
+ dept_name varchar(50), 
+ manager_id int, 
+ location_id int);
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> insert into department
+    -> (dept_id, dept_name, manager_id, location_id)values
+    -> (1,'it', 145, 1700),
+    -> (2,'administration', 135, 1900),
+    -> (3,'sales', 123, 1300),
+    -> (4,'it', 163, 2100),
+    -> (5,'marketing', 153, 1200),
+    -> (6,'human resources', 203, 2400);
+Query OK, 6 rows affected (0.01 sec)
+
+mysql> table department;
++---------+-----------------+------------+-------------+
+| dept_id | dept_name       | manager_id | location_id |
++---------+-----------------+------------+-------------+
+|       1 | it              |        145 |        1700 |
+|       2 | administration  |        135 |        1900 |
+|       3 | sales           |        123 |        1300 |
+|       4 | it              |        163 |        2100 |
+|       5 | marketing       |        153 |        1200 |
+|       6 | human resources |        203 |        2400 |
++---------+-----------------+------------+-------------+
+6 rows in set (0.00 sec)
+
+
+Q2. Write a SQL statement to insert 3 rows by a single insert statement.
