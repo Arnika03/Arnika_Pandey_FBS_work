@@ -413,8 +413,7 @@ Ana. mysql> table books;
 
 
 Q20. Insert into Book following data.
-	107, National Geographic, Adis Scott, 1000, Science
-
+	select
 Ans. mysql> insert into books
     -> (book_no,book_name,author_name,cost,category)
     -> values
@@ -526,5 +525,238 @@ mysql> select
 
 Q25. Remove the constraints on Issue table.
 
-Ans. 
+Ans. mysql> alter table issue
+    -> drop primary key;
+Query OK, 6 rows affected (0.19 sec)
+Records: 6  Duplicates: 0  Warnings: 0
 
+mysql> alter table issue
+    -> drop constraint issue_ibfk_1;
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table issue
+    -> drop constraint issue_ibfk_2;
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+
+Q26. Insert a record in Issue table. The member_id should not exist in member table.
+
+Ans. mysql> insert into issue
+    -> values
+    -> (7007,102,13,'2019-09-06',null);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> table issue;
++--------------+---------+-----------+------------+-------------+
+| lib_issue_id | book_no | member_id | issue_date | return_date |
++--------------+---------+-----------+------------+-------------+
+|         7001 |     101 |         1 | 2010-12-06 | NULL        |
+|         7002 |     102 |         2 | 2025-12-06 | NULL        |
+|         7003 |     104 |         1 | 2015-01-06 | NULL        |
+|         7004 |     101 |         1 | 2004-07-06 | NULL        |
+|         7005 |     104 |         2 | 2015-11-06 | NULL        |
+|         7006 |     101 |         3 | 2018-02-06 | NULL        |
+|         7007 |     102 |        13 | 2019-09-06 | NULL        |
++--------------+---------+-----------+------------+-------------+
+7 rows in set (0.00 sec)
+
+
+Q27. Now enable the constraints of Issue table. Observe the error
+
+Ans. mysql> alter table issue
+    -> add primary key(lib_issue_id);
+Query OK, 0 rows affected (0.10 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table issue
+    -> add foreign key(member_id)
+    -> references member(member_id);
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`firstbit_sql`.`#sql-1834_a`, CONSTRAINT `issue_ibfk_1` FOREIGN KEY (`member_id`) REFERENCES `member` (`member_id`))
+
+
+Q28. Delete the record inserted at Q-27) and enable the constraints.
+
+Ans. mysql> delete from issue where lib_issue_id = 7007;
+Query OK, 1 row affected (0.02 sec)
+
+mysql> table issue;
++--------------+---------+-----------+------------+-------------+
+| lib_issue_id | book_no | member_id | issue_date | return_date |
++--------------+---------+-----------+------------+-------------+
+|         7001 |     101 |         1 | 2010-12-06 | NULL        |
+|         7002 |     102 |         2 | 2025-12-06 | NULL        |
+|         7003 |     104 |         1 | 2015-01-06 | NULL        |
+|         7004 |     101 |         1 | 2004-07-06 | NULL        |
+|         7005 |     104 |         2 | 2015-11-06 | NULL        |
+|         7006 |     101 |         3 | 2018-02-06 | NULL        |
++--------------+---------+-----------+------------+-------------+
+6 rows in set (0.00 sec)
+
+mysql> alter table issue
+    -> add foreign key(member_id)
+    -> references member(member_id);
+Query OK, 6 rows affected (0.07 sec)
+
+
+Q29. Try to delete the record of member id 1 from member table and observe the error.
+
+Ans. mysql> delete from member where member_id = 1;
+ERROR 1451 (23000): Cannot delete or update a parent row: a foreign key constraint fails (`firstbit_sql`.`issue`, CONSTRAINT `issue_ibfk_1` FOREIGN KEY (`member_id`) REFERENCES `member` (`member_id`))
+
+
+Q30. View the data and structure of all the three tables Member, Issue, Book.
+
+Ans. mysql> desc member;
++-------------------+--------------+------+-----+---------+-------+
+| Field             | Type         | Null | Key | Default | Extra |
++-------------------+--------------+------+-----+---------+-------+
+| member_id         | int          | NO   | PRI | NULL    |       |
+| member_name       | varchar(20)  | YES  |     | NULL    |       |
+| member_address    | varchar(50)  | YES  |     | NULL    |       |
+| acc_open_date     | date         | YES  |     | NULL    |       |
+| membership_type   | varchar(20)  | YES  |     | NULL    |       |
+| fees_paid         | int          | YES  |     | NULL    |       |
+| max_books_allowed | int          | YES  |     | NULL    |       |
+| penalty_amount    | decimal(7,2) | YES  |     | NULL    |       |
++-------------------+--------------+------+-----+---------+-------+
+8 rows in set (0.06 sec)
+
+mysql> table member;
++-----------+----------------+----------------+---------------+-----------------+-----------+-------------------+----------------+
+| member_id | member_name    | member_address | acc_open_date | membership_type | fees_paid | max_books_allowed | penalty_amount |
++-----------+----------------+----------------+---------------+-----------------+-----------+-------------------+----------------+
+|         1 | Richa sharma   | pune           | 2010-12-05    | Lifetime        |     25000 |                 5 |          50.00 |
+|         2 | Garima sen     | pune           | 2025-10-02    | Annual          |      1000 |                 3 |           NULL |
+|         3 | Swechha Tiwari | rewa           | 2012-08-11    | Lifetime        |     15000 |                 2 |          40.00 |
+|         4 | Rupali Toge    | jabalpur       | 2013-06-16    | Half Yearly     |     10000 |                 5 |          30.00 |
+|         5 | Rutuja jadhav  | jabalpur       | 2007-07-09    | Quarterly       |      7000 |                 3 |          20.00 |
+|         6 | Sneha tamrakar | indore         | 2027-11-27    | Lifetime        |     35000 |                 6 |          60.00 |
+|         7 | Purti pandey   | satna          | 2023-09-21    | Quarterly       |     20000 |                 2 |          30.00 |
+|         8 | muskan kori    | keshav nagar   | 2018-03-03    | Half yearly     |     30000 |               110 |          40.00 |
++-----------+----------------+----------------+---------------+-----------------+-----------+-------------------+----------------+
+8 rows in set (0.00 sec)
+
+mysql> desc books;
++-------------+--------------+------+-----+---------+-------+
+| Field       | Type         | Null | Key | Default | Extra |
++-------------+--------------+------+-----+---------+-------+
+| book_no     | int          | NO   | PRI | NULL    |       |
+| book_name   | varchar(30)  | NO   |     | NULL    |       |
+| author_name | varchar(30)  | YES  |     | NULL    |       |
+| cost        | decimal(7,2) | YES  |     | NULL    |       |
+| category    | char(10)     | YES  |     | NULL    |       |
++-------------+--------------+------+-----+---------+-------+
+5 rows in set (0.01 sec)
+
+mysql> table books;
++---------+-----------------------------+--------------------+--------+----------+
+| book_no | book_name                   | author_name        | cost   | category |
++---------+-----------------------------+--------------------+--------+----------+
+|     101 | Let us C                    | Denis Ritchie      | 450.00 | System   |
+|     102 | Oracle-Complete Ref         | Loni               | 550.00 | Database |
+|     103 | Mastering SQL               | Loni               | 250.00 | Database |
+|     104 | PL SQL-Ref                  | Scott Urman        | 750.00 | Database |
+|     105 | Database Management Systems | Raghu Ramakrishnan | 600.00 | RDBMS    |
+|     106 | Harry Potter                | J.K. Rowling       | 650.00 | Fiction  |
++---------+-----------------------------+--------------------+--------+----------+
+6 rows in set (0.00 sec)
+
+mysql> desc issue;
++--------------+------+------+-----+---------+-------+
+| Field        | Type | Null | Key | Default | Extra |
++--------------+------+------+-----+---------+-------+
+| lib_issue_id | int  | NO   | PRI | NULL    |       |
+| book_no      | int  | YES  | MUL | NULL    |       |
+| member_id    | int  | YES  | MUL | NULL    |       |
+| issue_date   | date | YES  |     | NULL    |       |
+| return_date  | date | YES  |     | NULL    |       |
++--------------+------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> table issue;
++--------------+---------+-----------+------------+-------------+
+| lib_issue_id | book_no | member_id | issue_date | return_date |
++--------------+---------+-----------+------------+-------------+
+|         7001 |     101 |         1 | 2010-12-06 | NULL        |
+|         7002 |     102 |         2 | 2025-12-06 | NULL        |
+|         7003 |     104 |         1 | 2015-01-06 | NULL        |
+|         7004 |     101 |         1 | 2004-07-06 | NULL        |
+|         7005 |     104 |         2 | 2015-11-06 | NULL        |
+|         7006 |     101 |         3 | 2018-02-06 | NULL        |
++--------------+---------+-----------+------------+-------------+
+6 rows in set (0.00 sec)
+
+
+Q31. Modify the Return_Date of 7004,7005 to 15 days after the Issue_date.
+
+Ans. mysql> UPDATE issue
+    -> SET return_date = DATE_ADD(issue_date, INTERVAL 15 DAY)
+    -> WHERE lib_issue_id IN (7004, 7005);
+Query OK, 2 rows affected (0.01 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> table issue;
++--------------+---------+-----------+------------+-------------+
+| lib_issue_id | book_no | member_id | issue_date | return_date |
++--------------+---------+-----------+------------+-------------+
+|         7001 |     101 |         1 | 2010-12-06 | NULL        |
+|         7002 |     102 |         2 | 2025-12-06 | NULL        |
+|         7003 |     104 |         1 | 2015-01-06 | NULL        |
+|         7004 |     101 |         1 | 2004-07-06 | 2004-07-21  |
+|         7005 |     104 |         2 | 2015-11-06 | 2015-11-21  |
+|         7006 |     101 |         3 | 2018-02-06 | NULL        |
++--------------+---------+-----------+------------+-------------+
+6 rows in set (0.00 sec)
+
+
+Q32. Remove all the records from Issue table where member_ID is 1 and Issue date in before 10-Dec-06.
+
+Ans. mysql> delete from issue
+    -> WHERE member_id = 1
+    -> && issue_date < '2010-12-06';
+Query OK, 1 row affected, 1 warning (0.02 sec)
+
+mysql> table issue;
++--------------+---------+-----------+------------+-------------+
+| lib_issue_id | book_no | member_id | issue_date | return_date |
++--------------+---------+-----------+------------+-------------+
+|         7001 |     101 |         1 | 2010-12-06 | NULL        |
+|         7002 |     102 |         2 | 2025-12-06 | NULL        |
+|         7003 |     104 |         1 | 2015-01-06 | NULL        |
+|         7005 |     104 |         2 | 2015-11-06 | 2015-11-21  |
+|         7006 |     101 |         3 | 2018-02-06 | NULL        |
++--------------+---------+-----------+------------+-------------+
+5 rows in set (0.00 sec)
+
+
+Q33. Remove all the records from Book table with category other than RDBMS and Database.
+
+
+Ans. mysql> delete from books
+    -> WHERE category NOT IN ('Database','RDBMS');
+Query OK, 2 rows affected (0.02 sec)
+
+mysql> table books;
++---------+-----------------------------+--------------------+--------+----------+
+| book_no | book_name                   | author_name        | cost   | category |
++---------+-----------------------------+--------------------+--------+----------+
+|     102 | Oracle-Complete Ref         | Loni               | 550.00 | Database |
+|     103 | Mastering SQL               | Loni               | 250.00 | Database |
+|     104 | PL SQL-Ref                  | Scott Urman        | 750.00 | Database |
+|     105 | Database Management Systems | Raghu Ramakrishnan | 600.00 | RDBMS    |
++---------+-----------------------------+--------------------+--------+----------+
+4 rows in set (0.00 sec)
+
+
+Q34. Remove the table Member.
+
+Ans. mysql> drop table member;
+ERROR 3730 (HY000): Cannot drop table 'member' referenced by a foreign key constraint 'issue_ibfk_1' on table 'issue'.
+
+
+Q35. Remove the table Book.
+
+Ans. mysql> drop table books;
+Query OK, 0 rows affected (0.05 sec) 
